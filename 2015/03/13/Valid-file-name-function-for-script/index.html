@@ -3,17 +3,26 @@
 <head>
   <meta charset="utf-8">
   
-  <title>黑楼之妖</title>
+  <title>编一个剔除非法字符的脚本函数 | 黑楼之妖</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Golden software, Surfer, Grapher, Didger, Mapviewer, Strater, Voxler, Hexo, GitHub">
-<meta property="og:type" content="website">
-<meta property="og:title" content="黑楼之妖">
-<meta property="og:url" content="https://holz.github.io/index.html">
+  <meta name="description" content="Golden Software 系列软件，如 Surfer, Grapher，自带有脚本自动化程序 Scripter， 使用 WinWrap Basic 语言，所以极易上手。
+很多时候，我的脚本需要读取数据文件的某个参数，然后根据参数自动生成文件名。
+但是，Windows 下文件名有一些避讳，某些字符是不能出现在文件名当中的。
+所以，在生成一个文件名之前，有必要对读取到的参数进行校验，把非法字符去">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编一个剔除非法字符的脚本函数">
+<meta property="og:url" content="https://holz.github.io/2015/03/13/Valid-file-name-function-for-script/index.html">
 <meta property="og:site_name" content="黑楼之妖">
-<meta property="og:description" content="Golden software, Surfer, Grapher, Didger, Mapviewer, Strater, Voxler, Hexo, GitHub">
+<meta property="og:description" content="Golden Software 系列软件，如 Surfer, Grapher，自带有脚本自动化程序 Scripter， 使用 WinWrap Basic 语言，所以极易上手。
+很多时候，我的脚本需要读取数据文件的某个参数，然后根据参数自动生成文件名。
+但是，Windows 下文件名有一些避讳，某些字符是不能出现在文件名当中的。
+所以，在生成一个文件名之前，有必要对读取到的参数进行校验，把非法字符去">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="黑楼之妖">
-<meta name="twitter:description" content="Golden software, Surfer, Grapher, Didger, Mapviewer, Strater, Voxler, Hexo, GitHub">
+<meta name="twitter:title" content="编一个剔除非法字符的脚本函数">
+<meta name="twitter:description" content="Golden Software 系列软件，如 Surfer, Grapher，自带有脚本自动化程序 Scripter， 使用 WinWrap Basic 语言，所以极易上手。
+很多时候，我的脚本需要读取数据文件的某个参数，然后根据参数自动生成文件名。
+但是，Windows 下文件名有一些避讳，某些字符是不能出现在文件名当中的。
+所以，在生成一个文件名之前，有必要对读取到的参数进行校验，把非法字符去">
   
     <link rel="alternative" href="/atom.xml" title="黑楼之妖" type="application/atom+xml">
   
@@ -155,9 +164,7 @@
 		</header>				
 	</div>
 </nav>
-      <div class="body-wrap">
-  
-    <article id="post-Valid-file-name-function-for-script" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-Valid-file-name-function-for-script" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
       <a href="/2015/03/13/Valid-file-name-function-for-script/" class="article-date">
@@ -173,12 +180,23 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/13/Valid-file-name-function-for-script/">编一个剔除非法字符的脚本函数</a>
+    <h1 class="article-title" itemprop="name">
+      编一个剔除非法字符的脚本函数
     </h1>
   
 
       </header>
+      
+      <div class="article-info">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Grapher/">Grapher</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Script/">Script</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Surfer/">Surfer</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
       
     
     <div class="article-entry" itemprop="articleBody">
@@ -195,27 +213,22 @@
 <p>这个函数的代码更简单，复制到脚本中，就多了一个叫 ToValidFileName 的函数， 要去掉字符串 str 中的非法字符， 只要一行代码 <code>str = ToValidFileName(str)</code> 即可。</p>
 
         
-          <!-- show an end symbol if the article is fully displayed -->
-          <hr/>
-          <p class="article-more-link">
-            <a>end</a>
-          </p>
-        
       
-    </div>
-    
-    <div class="article-info">
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Grapher/">Grapher</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Script/">Script</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Surfer/">Surfer</a></li></ul>
-	</div>
-
-      
-
-      <div class="clearfix"></div>
     </div>
     
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/03/12/Deploy-hexo-to-github-pages/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">使用 Hexo 在 GitHub 搭建博客</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
   
 </article>
 
@@ -223,150 +236,6 @@
 
 
 
-
-  
-    <article id="post-Deploy-hexo-to-github-pages" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/03/12/Deploy-hexo-to-github-pages/" class="article-date">
-  	<time datetime="2015-03-12T02:54:08.000Z" itemprop="datePublished">2015-03-12</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/12/Deploy-hexo-to-github-pages/">使用 Hexo 在 GitHub 搭建博客</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="关于_github">关于 github</h2><h3 id="关于账号申请和设置">关于账号申请和设置</h3><p>申请 <a href="https://github.com" target="_blank" rel="external">GitHub</a> 账号，设置 ssh key，下载安装 git bash、 node.js 之类网上已有大把资料，也不容易出错。</p>
-<h3 id="关于建立仓库">关于建立仓库</h3><p>登陆 github 之后，因为要建立的是一个博客，所以在 New repository 那里，取名要以 xxx.github.io 的形式。</p>
-<p>譬如，我希望别人用 <a href="http://holz.github.io" target="_blank" rel="external">holz.github.io</a> 这个网址访问我的博客，那么在 New repository 的时候，取名就是 holz.github.io。</p>
-<p>之前就是没理解，取名错误，走了弯路。</p>
-<h2 id="关于_hexo">关于 hexo</h2><p>之前跟着一个很详细的教程做，结果一步一步下来，居然没办法部署，这一定是我看的姿势不对。</p>
-<p>所以到 <a href="https://hexo.io" target="_blank" rel="external">hexo 官网</a> 看，然后结合自己的理解，重新做，总算把网站搞成了。</p>
-<h3 id="建立_hexo_博客本地版">建立 hexo 博客本地版</h3><p>要用 hexo 做一个网站，首先要在本地硬盘上建立相关的文件，所以在自己的硬盘上选择一个文件夹，或者新建一个文件夹，用来存放网站的相关文件。</p>
-<p>譬如我的网址将是 holz.github.io，我就想在 D 盘建一个名叫 holz.github.io 的文件夹，这样很好识别对不对？</p>
-<p>那么启动 git bash，依次执行下面的命令，你就得到一个 hexo 博客的本地版：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> d:</span><br><span class="line">$ npm install hexo-cli -g</span><br><span class="line">$ hexo init holz.github.io</span><br><span class="line">$ <span class="built_in">cd</span> holz.github.io</span><br><span class="line">$ npm install</span><br><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>打开浏览器访问 <a href="http://localhost:4000" target="_blank" rel="external">http://localhost:4000</a> 就看到你的本地博客啦，有一篇文章叫 Hello World 对不对？</p>
-<h3 id="部署到_github">部署到 github</h3><p>在部署到 github 之前，有两件事要做，第一是修改配置文件，打开资源管理器，进入 holz.github.io 文件夹，找到 _config.yml，用任何文本编辑器打开，拉到最后，按自己的账号和仓库信息改下面几行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">      <span class="built_in">type</span>: git</span><br><span class="line">      repository: https://github.com/holz/holz.github.io</span><br><span class="line">      branch: master</span><br></pre></td></tr></table></figure>
-<p>保存退出编辑器，回到资源管理器（依然在 holz.github.io 目录中，没切换走吧？），在空白处点右键，选择 git bash，然后在打开的 git bash 中运行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br><span class="line">$ hexo generate</span><br><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>打开浏览器，输入网址 holz.github.io 访问。</p>
-
-        
-          <!-- show an end symbol if the article is fully displayed -->
-          <hr/>
-          <p class="article-more-link">
-            <a>end</a>
-          </p>
-        
-      
-    </div>
-    
-    <div class="article-info">
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GitHub/">GitHub</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li></ul>
-	</div>
-
-      
-
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/03/11/hello-world/" class="article-date">
-  	<time datetime="2015-03-11T02:54:08.000Z" itemprop="datePublished">2015-03-11</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/11/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>磕磕巴巴申请了一个 github 账号，然后跌跌撞撞安装了一个 <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>。 正在翻看<a href="http://hexo.io/zh-cn/docs/" target="_blank" rel="external">hexo 文档</a>学习如何建站。</p>
-<h2 id="快速上手">快速上手</h2><h3 id="新建一篇文章">新建一篇文章</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>详情参阅： <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">撰稿</a></p>
-<h3 id="运行服务器">运行服务器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>详情参阅： <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">服务器</a></p>
-<h3 id="生成静态文件">生成静态文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>详情参阅： <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">生成静态文件</a></p>
-<h3 id="部署到远程站点">部署到远程站点</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>详情参阅： <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">部署</a></p>
-
-        
-          <!-- show an end symbol if the article is fully displayed -->
-          <hr/>
-          <p class="article-more-link">
-            <a>end</a>
-          </p>
-        
-      
-    </div>
-    
-    <div class="article-info">
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li></ul>
-	</div>
-
-      
-
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-  
-  
 </div>
       <footer id="footer">
   <div class="outer">
