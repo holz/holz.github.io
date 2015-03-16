@@ -99,7 +99,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a><a href="/tags/Grapher/" style="font-size: 10px;">Grapher</a><a href="/tags/Hexo/" style="font-size: 20px;">Hexo</a><a href="/tags/Script/" style="font-size: 10px;">Script</a><a href="/tags/Surfer/" style="font-size: 10px;">Surfer</a>
+						<a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a><a href="/tags/Grapher/" style="font-size: 10px;">Grapher</a><a href="/tags/Hexo/" style="font-size: 20px;">Hexo</a><a href="/tags/Script/" style="font-size: 20px;">Script</a><a href="/tags/Surfer/" style="font-size: 20px;">Surfer</a>
 					</div>
 				</section>
 				
@@ -156,6 +156,73 @@
 	</div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-Script-init-surfer-handle" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/16/Script-init-surfer-handle/" class="article-date">
+  	<time datetime="2015-03-16T00:36:54.000Z" itemprop="datePublished">2015-03-16</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/16/Script-init-surfer-handle/">如何在脚本中初始化 Surfer 实例</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>要用脚本完成一些 Surfer 自动化任务，首先要解决的是，如何获取一个实例。</p>
+<p>Surfer 的官方帮助给出的多是简单粗暴的新建实例方法，若干脚本运行下来，不，只要一个脚本运行个若干次，屏幕上就多出一堆 Surfer 窗口。</p>
+<p>实际上，已经运行的 Surfer 实例可以通过 <code>GetObject()</code> 函数获取。所以在做 Surfer 自动化时，可以先从内存在获取实例，内存中没有再新建一个。</p>
+<p>完成自动化任务后，对 Surfer 实例的处理也分两种情况，自己新建的直接关闭，否则保留。如此就需要一个判断标记。</p>
+<p>完整的初始化代码如下：</p>
+<figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">'先关闭错误报告，防止程序中断</span></span><br><span class="line"><span class="keyword">On</span> <span class="keyword">Error</span> <span class="keyword">Resume</span> <span class="keyword">Next</span></span><br><span class="line"><span class="comment">'尝试从内存获取 Surfer 实例</span></span><br><span class="line"><span class="keyword">Set</span> wsApp=GetObject(,<span class="string">"Surfer.Application"</span>)</span><br><span class="line"><span class="comment">'如果从内存取得 Surfer 实例，则新实例标记设为假</span></span><br><span class="line">IsNewHandle=<span class="literal">False</span></span><br><span class="line"><span class="comment">'如果出错，表示内存中找不到 Surfer 实例</span></span><br><span class="line"><span class="keyword">If</span> Err.Number&lt;&gt;<span class="number">0</span> <span class="keyword">Then</span></span><br><span class="line">	<span class="comment">'那就自己新建一个 Surfer 实例</span></span><br><span class="line">	<span class="keyword">Set</span> wsApp=CreateObject(<span class="string">"Surfer.Application"</span>)</span><br><span class="line">	<span class="comment">'新实例标记为真</span></span><br><span class="line">	IsNewHandle=<span class="literal">True</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line"><span class="comment">'重新打开错误报告</span></span><br><span class="line"><span class="keyword">On</span> <span class="keyword">Error</span> <span class="keyword">GoTo</span> <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>怎么应用？假设写的脚本要处理某些数据文件，那么初始化 Surfer 之后就该读数据了。一般我在这里做程序终止判断，假如选择文件的时候按了“取消”，就结束。</p>
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">'弹出对话框来选择文件</span><br><span class="line">sDAT=GetFilePath(,<span class="string">"xls;csv;txt;dat"</span>,,<span class="string">"选择要处理的数据文件"</span>,<span class="number">4</span>)</span><br><span class="line">'如果按了“取消”按钮</span><br><span class="line"><span class="keyword">If</span> sDAT=<span class="string">""</span> Then</span><br><span class="line">	'如果是新建实例就退出</span><br><span class="line">	<span class="keyword">If</span> IsNewHandle Then	wsApp.Quit</span><br><span class="line">	Set wsApp=Nothing</span><br><span class="line">	End</span><br><span class="line">End <span class="keyword">If</span></span><br></pre></td></tr></table></figure>
+<p>以上搞这么多复杂的辅助代码，都是因为我自己电脑配置差，内存吃紧，要节约每一个字节。要是像现在标配 8G 内存，动不动几十个 GB 内存，哪里要这么复杂啊。初始化只要一句 <code>Set wsApp=CreateObject(&quot;Surfer.Application&quot;)</code> 就可以了，完事也不用判断来判读去，直接 <code>wsApp.Quit</code> 解决。</p>
+
+        
+          <!-- show an end symbol if the article is fully displayed -->
+          <hr/>
+          <p class="article-more-link">
+            <a>end</a>
+          </p>
+        
+      
+    </div>
+    
+    <div class="article-info">
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Script/">Script</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Surfer/">Surfer</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
   
     <article id="post-Valid-file-name-function-for-script" class="article article-type-post" itemscope itemprop="blogPost">
   
