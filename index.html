@@ -99,7 +99,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a><a href="/tags/Grapher/" style="font-size: 10px;">Grapher</a><a href="/tags/Hexo/" style="font-size: 20px;">Hexo</a><a href="/tags/Script/" style="font-size: 20px;">Script</a><a href="/tags/Surfer/" style="font-size: 20px;">Surfer</a>
+						<a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a><a href="/tags/Grapher/" style="font-size: 10px;">Grapher</a><a href="/tags/Hexo/" style="font-size: 15px;">Hexo</a><a href="/tags/Script/" style="font-size: 20px;">Script</a><a href="/tags/Surfer/" style="font-size: 20px;">Surfer</a>
 					</div>
 				</section>
 				
@@ -156,6 +156,78 @@
 	</div>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-Grid-inside-data-area" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/17/Grid-inside-data-area/" class="article-date">
+  	<time datetime="2015-03-17T02:07:40.000Z" itemprop="datePublished">2015-03-17</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/17/Grid-inside-data-area/">只网格化有数据区域</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Surfer 在网格化的时候，是将离散的数据变成一个规则的矩形网格，没有数据的地方，Surfer 会通过内插或外插的方式填充数据。</p>
+<p>在实际应用中，我们往往希望那些没有数据的区域保持空白。</p>
+<p>传统做法是先做网格化，再通过数字化或其他方式建立边界文件，然后进行白化。这样的做法手续繁杂，遇到大量数据时简直烦不胜烦。</p>
+<p>若干年前，只想着怎么自动生成边界文件，于是到 <a href="http://www.goldensoftware.com/forum/viewtopic.php?f=1&amp;t=5846" target="_blank" rel="external">Golden Software 论坛寻求帮助</a>， 幸得一众高手接连出招。</p>
+<p>选了其中简单的方法，用了几年，效果算不错。</p>
+<p>原理很简单，首先正常网格化，用你喜欢的网格化方法和参数，得到网格 A。</p>
+<p>再用合适的搜索半径配合 <strong>Data Metrics</strong> 方法建立一个辅助网格，<strong>Grid -&gt; Data -&gt; Data Metrics -&gt; Advanced Options -&gt; Count -&gt; Search Radii </strong>，暂且称为 Aux 网格。</p>
+<p>然后在 Aux 网格基础上建立遮罩网格，把 Aux 网格中所有小于 1 的值替换为白化值（Surfer 默认是 1.70141e+038），其他值全部替换为 0。使用 <strong>Grid -&gt; Math</strong> 命令配合公式 <code>IF(A &lt;1,1.70141e+038,0)</code> 即可得到网格 B。</p>
+<p>用 <strong>Grid -&gt; Math</strong> 命令配合公式 <code>A + B</code>， 让网格 A 和网格 B 相加得到最终结果，且叫它网格 C。</p>
+<p>转换成代码也简单，首先根据输入的数据文件确定几个网格文件名。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sDAT=<span class="function"><span class="title">GetFilePath</span><span class="params">(,<span class="string">"xls;csv;txt;dat"</span>,,<span class="string">"选择要网格化的数据文件"</span>,<span class="number">4</span>)</span></span></span><br><span class="line">sGrdA=<span class="function"><span class="title">Left</span><span class="params">(sDAT,Len(sDAT)</span></span>-<span class="number">4</span>) &amp; <span class="string">"-A.grd"</span></span><br><span class="line">sGrdB=<span class="function"><span class="title">Left</span><span class="params">(sDAT,Len(sDAT)</span></span>-<span class="number">4</span>) &amp; <span class="string">"-B.grd"</span></span><br><span class="line">sGrdC=<span class="function"><span class="title">Left</span><span class="params">(sDAT,Len(sDAT)</span></span>-<span class="number">4</span>) &amp; <span class="string">"-C.grd"</span></span><br></pre></td></tr></table></figure>
+<p>然后通过 Surfer 工作表的统计功能，估算一个搜索半径。<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Set wks=wsApp<span class="class">.Documents</span><span class="class">.Open</span>(FileName:=sDAT)</span><br><span class="line">Set Stats=wks.<span class="function"><span class="title">Columns</span><span class="params">(Col1:=ColA, Col2:=ColB)</span></span>.<span class="function"><span class="title">Statistics</span><span class="params">(Flags:=wksStatsRange)</span></span></span><br><span class="line">r1=<span class="function"><span class="title">Int</span><span class="params">(Stats.Range(<span class="number">1</span>)</span></span>*<span class="number">0.075</span>)</span><br><span class="line">r2=<span class="function"><span class="title">Int</span><span class="params">(Stats.Range(<span class="number">2</span>)</span></span>*<span class="number">0.075</span>)</span><br><span class="line">r=<span class="function"><span class="title">IIf</span><span class="params">(r1&lt;r2,r1,r2)</span></span></span><br><span class="line">wks.<span class="function"><span class="title">Close</span><span class="params">(SaveChanges:=srfSaveChangesNo)</span></span></span><br></pre></td></tr></table></figure></p>
+<p>最后就是网格化。<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">wsApp.GridData2( <span class="string">DataFile:</span>=sDAT, <span class="string">xCol:</span>=ColA, <span class="string">yCol:</span>=ColB, <span class="string">zCol:</span>=ColC, <span class="string">DupMethod:</span>=srfDupAvg, _</span><br><span class="line"><span class="label">   Algorithm:</span>=srfKriging, <span class="string">ShowReport:</span>=False, <span class="string">OutGrid:</span>=sGrdA, <span class="string">OutFmt:</span>=srfGridFmtS7)</span><br><span class="line">wsApp.GridData2( <span class="string">DataFile:</span>=sDAT, <span class="string">xCol:</span>=ColA, <span class="string">yCol:</span>=ColB, <span class="string">zCol:</span>=ColC, <span class="string">DupMethod:</span>=srfDupAvg, _</span><br><span class="line"><span class="label">   Algorithm:</span>=srfDataMetrics, <span class="string">ShowReport:</span>=False, <span class="string">SearchEnable:</span>=True,  _</span><br><span class="line"><span class="label">   SearchNumSectors:</span>=<span class="number">1</span>, <span class="string">SearchRad1:</span>=r, <span class="string">SearchRad2:</span>=r,  <span class="string">SearchMinData:</span>=<span class="number">1</span>, _</span><br><span class="line"><span class="label">   OutGrid:</span>=sGrdC, <span class="string">OutFmt:</span>=srfGridFmtS7, <span class="string">DataMetric:</span>=srfDMCount)</span><br><span class="line">wsApp.GridMath( <span class="string">Function:</span>=<span class="string">"c=if(a&lt;1,1.70141e+038,0)"</span>, <span class="string">InGridA:</span>=sGrdC, <span class="string">OutGridC:</span>=sGrdB, <span class="string">OutFmt:</span>=srfGridFmtS7 )</span><br><span class="line">wsApp.GridMath( <span class="string">Function:</span>=<span class="string">"c=a+b"</span>, <span class="string">InGridA:</span>=sGrdA, <span class="string">InGridB:</span>=sGrdB, <span class="string">OutGridC:</span>=sGrdC, <span class="string">OutFmt:</span>=srfGridFmtS7 )</span><br></pre></td></tr></table></figure></p>
+<p>脚本运行之后， sGrdC 就是想要的结果，其他都可删除，可在脚本中用 <code>Kill sGrdA</code> 这样的语句删除。</p>
+
+        
+          <!-- show an end symbol if the article is fully displayed -->
+          <hr/>
+          <p class="article-more-link">
+            <a>end</a>
+          </p>
+        
+      
+    </div>
+    
+    <div class="article-info">
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Script/">Script</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Surfer/">Surfer</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
   
     <article id="post-Script-init-surfer-handle" class="article article-type-post" itemscope itemprop="blogPost">
   
