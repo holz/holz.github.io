@@ -157,6 +157,69 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-Fill-contours-automatically" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2015/03/18/Fill-contours-automatically/" class="article-date">
+  	<time datetime="2015-03-18T03:09:25.000Z" itemprop="datePublished">2015-03-18</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/18/Fill-contours-automatically/">通过脚本填充等值线</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Surfer 一直进化到了 12 版，通过脚本调用 clr 文件填充等值线的功能都未能实现，不知道各 Surfer 用户还能不能记得自己是在哪个版本开始提这个需求的？</p>
+<p>好在 Surfer 的 Automation 认得 RGB 这个函数，可以使用 rgb 颜色，使得自定义渐变填充色变得不是那么困难。</p>
+<p>以下是一个完成的例子：</p>
+<figure class="highlight vbnet"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">'作图需要一个网格文件，选一个</span></span><br><span class="line">sGRD=GetFilePath(,<span class="string">"grd"</span>,,<span class="string">"选择一个网格文件"</span>,<span class="number">4</span>)</span><br><span class="line"><span class="comment">'如果按了取消，则结束</span></span><br><span class="line"><span class="keyword">If</span> sGRD = <span class="string">""</span> <span class="keyword">Then</span> <span class="keyword">End</span></span><br><span class="line"></span><br><span class="line"><span class="comment">'先启动 Surfer</span></span><br><span class="line"><span class="keyword">Set</span> wsApp=CreateObject(<span class="string">"Surfer.Application"</span>)</span><br><span class="line"><span class="comment">'新建一个绘图窗口</span></span><br><span class="line"><span class="keyword">Set</span> plot=wsApp.Documents.Add(srfDocPlot)</span><br><span class="line"><span class="comment">'用选择的网格文件建立一个等值线图</span></span><br><span class="line"><span class="keyword">Set</span> Mapframe=plot.Shapes.AddContourMap(sGrd)</span><br><span class="line"></span><br><span class="line"><span class="comment">'一个等值线图起码包含5个图层：一个等值线图层和四个坐标图层</span></span><br><span class="line"><span class="comment">'新建立的等值线图中，第一层就是等值线图层</span></span><br><span class="line"><span class="keyword">Set</span> ContourMap=Mapframe.Overlays(<span class="number">1</span>)</span><br><span class="line"><span class="comment">'启用等值线填充，不然后面的代码无意义</span></span><br><span class="line">ContourMap.FillContours=<span class="literal">True</span></span><br><span class="line"><span class="comment">'进入等值线图层中的等级领域</span></span><br><span class="line"><span class="keyword">Set</span> Levels=ContourMap.Levels</span><br><span class="line"><span class="comment">'一般用了等值线填充，就无需等值线标注，所以关闭标注</span></span><br><span class="line">Levels.SetLabelFrequency(FirstIndex:=<span class="number">1</span>, NumberToSet:=<span class="number">0</span>, NumberToSkip:=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">'获得等级个数</span></span><br><span class="line">n = Levels.Count</span><br><span class="line"><span class="comment">'通过循环为每个等级填充一个颜色</span></span><br><span class="line"><span class="comment">'颜色的控制通过 ColorInc 变量和 RGB 函数完成</span></span><br><span class="line"><span class="keyword">For</span> i=<span class="number">1</span> <span class="keyword">To</span> n</span><br><span class="line">	ColorInc = <span class="number">255.0</span> * (i-<span class="number">1</span>) / (n-<span class="number">1</span>)</span><br><span class="line">	Levels(i).Fill.ForeColor = RGB(<span class="number">0</span>,<span class="number">255</span>-ColorInc,ColorInc)</span><br><span class="line"><span class="keyword">Next</span> i</span><br><span class="line"></span><br><span class="line"><span class="comment">'通过脚本启动的 Surfer 有可能藏起来，所以强制其可见</span></span><br><span class="line">wsApp.Visible=<span class="literal">True</span></span><br><span class="line"><span class="comment">'缩放到适应窗口，方便查看结果</span></span><br><span class="line">plot.Windows(<span class="number">1</span>).Zoom(srfZoomFitToWindow)</span><br></pre></td></tr></table></figure>
+<p>通过控制颜色算法，可以得到各种颜色填充效果，也可以设置随机颜色，这样脚本运行次数多了，说不定会得到一个惊喜的配色。</p>
+
+        
+          <!-- show an end symbol if the article is fully displayed -->
+          <hr/>
+          <p class="article-more-link">
+            <a>end</a>
+          </p>
+        
+      
+    </div>
+    
+    <div class="article-info">
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Script/">Script</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Surfer/">Surfer</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+  
     <article id="post-Grid-inside-data-area" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
